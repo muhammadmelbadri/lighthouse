@@ -7,21 +7,30 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Your Year in Pie</h1>
+  <div id="container">
+    <header>
+      <h1>Your Year in Pie</h1>
+      <div id="yearInfo">
+        <div>366 Days in 2024</div>
+        <div>8784 Hours in 2024</div>
+      </div>
+    </header>
+    
+    <main>
+      <div id="pieChart"></div>
+      <div id="categoryList">
+        <!-- Category items will be appended here by JavaScript -->
+      </div>
+    </main>
+    
+    <footer>
+      <input type="text" id="categoryName" placeholder="Category Name">
+      <input type="number" id="hoursSpent" placeholder="Hours Spent">
+      <button onclick="addCategory()">EDIT</button>
+    </footer>
+  </div>
   
-  <div>
-  <label for="categoryName">Category Name:</label>
-  <input type="text" id="categoryName" name="categoryName">
-</div>
-<div>
-  <label for="hoursSpent">Hours Spent:</label>
-  <input type="number" id="hoursSpent" name="hoursSpent">
-</div>
-
-<div id="pieChart" style="margin-top: 20px;"></div>
-  
-<button onclick="addCategory()">Add Category</button>
-  <!-- More content will go here -->
   <script src="script.js"></script>
 </body>
 </html>
+
