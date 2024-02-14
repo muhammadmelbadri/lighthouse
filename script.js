@@ -137,3 +137,19 @@ function loadData() {
 // Call loadData when the script loads
 loadData();
 
+function addCategory() {
+  const categoryName = document.getElementById('categoryName').value;
+  const hoursSpent = parseInt(document.getElementById('hoursSpent').value, 10);
+
+  // Calculate total hours already allocated
+  const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
+  const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
+
+  // Check if the new hours exceed the total hours in the year
+  if (totalAllocatedHours + hoursSpent > totalHoursInYear) {
+    alert('The total hours allocated exceed the total hours in the year!');
+    return; // Prevent adding the category
+  }
+
+  // ... rest of the addCategory function ...
+}
