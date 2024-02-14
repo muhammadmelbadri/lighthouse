@@ -84,3 +84,56 @@ function createPieChart() {
     }
   });
 }
+
+function displayCategories() {
+  // Get the container that will hold the list of categories
+  const categoryList = document.getElementById('categoryList');
+  categoryList.innerHTML = '';  // Clear existing categories
+
+  // Loop through each category and create list items
+  data.labels.forEach(function(label, index) {
+    const listItem = document.createElement('div');
+    listItem.innerText = `${label}: ${data.datasets[0].data[index]} hours`;
+    
+    // Create a delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.innerText = 'Delete';
+    deleteButton.onclick = function() {
+      // Remove the category and update the chart
+      data.labels.splice(index, 1);
+      data.datasets[0].data.splice(index, 1);
+      data.datasets[0].backgroundColor.splice(index, 1);
+      createPieChart();
+      displayCategories();
+    };
+
+    listItem.appendChild(deleteButton);
+    categoryList.appendChild(listItem);
+  });
+}
+
+// Update addCategory to call displayCategories
+function addCategory() {
+  // ... existing addCategory code ...
+  
+  // Now also update the category display
+  displayCategories();
+}
+
+
+function saveData() {
+  localStorage.setItem('pieChartData', JSON.stringify(data));
+}
+
+function loadData() {
+  const storedData = localStorage.getItem('pieChartData');
+  if (storedData) {
+    data = JSON.parse(storedData);
+    createPieChart();
+    displayCategories();
+  }
+}
+
+// Call loadData when the script loads
+loadData();
+
