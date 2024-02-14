@@ -1,1 +1,22 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+label {
+  margin-right: 10px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+#pieChart {
+  width: 400px;
+  height: 400px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
 
