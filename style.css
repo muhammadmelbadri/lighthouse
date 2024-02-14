@@ -58,3 +58,24 @@ button:hover {
   background-color: #003d82;
 }
 
+@media (max-width: 768px) {
+  #container {
+    width: auto;
+    margin: 10px;
+  }
+
+  footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input[type="text"],
+  input[type="number"] {
+    width: auto; /* Let the inputs take the full width on small screens */
+    margin-bottom: 10px; /* Add space between the stacked inputs */
+  }
+
+  button {
+    width: 100%;
+  }
+}
