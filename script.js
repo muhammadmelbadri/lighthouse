@@ -2,13 +2,28 @@ function addCategory() {
   const categoryName = document.getElementById('categoryName').value;
   const hoursSpent = document.getElementById('hoursSpent').value;
 
-  // For now, just log the input values to the console
-  console.log('Category Name:', categoryName, 'Hours Spent:', hoursSpent);
+  // Add the new category to the pie chart data
+  data.labels.push(categoryName);
+  data.datasets[0].data.push(hoursSpent);
+  data.datasets[0].backgroundColor.push(getRandomColor()); // A function to generate a random color
+
+  // Update the chart
+  createPieChart();
 
   // Clear the input fields
   document.getElementById('categoryName').value = '';
   document.getElementById('hoursSpent').value = '';
 }
+
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
 
 function updateYearInfo() {
   const now = new Date();
@@ -53,3 +68,19 @@ var data = {
     hoverOffset: 4
   }]
 };
+
+function createPieChart() {
+  const ctx = document.getElementById('pieChart').getContext('2d');
+  const myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+      }
+    }
+  });
+}
