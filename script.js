@@ -153,3 +153,74 @@ function addCategory() {
 
   // ... rest of the addCategory function ...
 }
+
+// Assuming data is already defined in your script
+var data = {
+  labels: [],
+  datasets: [{
+    data: [],
+    backgroundColor: [],
+    hoverOffset: 4
+  }]
+};
+
+// Function to create or update the pie chart
+function createPieChart() {
+  // Get the context of the canvas element we want to select
+  var ctx = document.getElementById('chartArea').getContext('2d');
+  // If there's already a chart instance, destroy it to ensure we're creating a fresh one
+  if (window.myPieChart) {
+    window.myPieChart.destroy();
+  }
+  window.myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: {
+      responsive: true,
+      // Additional options can be set here
+    }
+  });
+}
+
+// Function to add a new category
+function addCategory() {
+  var categoryName = document.getElementById('categoryName').value.trim();
+  var hoursSpent = parseFloat(document.getElementById('hoursSpent').value.trim());
+
+  // Basic validation for empty values
+  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0) {
+    alert("Please enter a category name and a valid number of hours.");
+    return;
+  }
+
+  // Add the new category to the chart data
+  data.labels.push(categoryName);
+  data.datasets[0].data.push(hoursSpent);
+  data.datasets[0].backgroundColor.push(getRandomColor()); // Assign a random color or choose one from a predefined set
+
+  // Update the chart
+  createPieChart();
+
+  // Clear the input fields
+  document.getElementById('categoryName').value = '';
+  document.getElementById('hoursSpent').value = '';
+  
+  // Save the updated data to local storage
+  saveData();
+}
+
+// Function to generate a random color for the pie chart segments
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+// Call these functions to initialize the pie chart with any saved data
+loadData();
+createPieChart();
+
+// Make sure to include functions for saveData and loadData here as well
