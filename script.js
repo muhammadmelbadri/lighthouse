@@ -44,7 +44,7 @@ function updateYearInfo() {
 updateYearInfo();
 
 function createPieChart(data) {
-  var ctx = document.getElementById('pieChart').getContext('2d');
+  const ctx = document.getElementById('chartArea').getContext('2d');
   var myPieChart = new Chart(ctx, {
     type: 'pie',
     data: data,
