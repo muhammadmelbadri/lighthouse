@@ -38,3 +38,18 @@ function createPieChart(data) {
     }
   });
 }
+
+var data = {
+  labels: [
+    // Category labels go here
+  ],
+  datasets: [{
+    data: [
+      // Corresponding values go here
+    ],
+    backgroundColor: [
+      // Colors for each slice go here
+    ],
+    hoverOffset: 4
+  }]
+};
