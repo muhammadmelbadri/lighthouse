@@ -27,3 +27,14 @@ function updateYearInfo() {
 
 // Call this function when the script loads
 updateYearInfo();
+
+function createPieChart(data) {
+  var ctx = document.getElementById('pieChart').getContext('2d');
+  var myPieChart = new Chart(ctx, {
+    type: 'pie',
+    data: data,
+    options: {
+      // ... options here
+    }
+  });
+}
