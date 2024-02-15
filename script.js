@@ -53,8 +53,8 @@ function addCategory() {
   const frequency = document.getElementById('frequency').value;
 
   // Validate inputs
-  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0 || hoursSpent > 24) {
-    alert("Please enter a category name and a valid number of hours (1-24).");
+  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0 || hoursSpent > 100) {
+    alert("Please enter a category name and a valid number of hours (1-100).");
     return;
   }
 
