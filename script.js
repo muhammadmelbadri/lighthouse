@@ -79,7 +79,27 @@ function displayCategories() {
 
   // Create list items for each category
   data.labels.forEach((label, index) => {
-    const hours = data.datasets[0].data[index
+    const hours = data.datasets[0].data[index];
+    const percentage = ((hours / effectiveTotalHours) * 100).toFixed(2); // Calculate the percentage
+
+    // Create a list item for the category and its calculated percentage
+    const listItem = document.createElement('div');
+    listItem.innerText = `${label}: ${hours} hours (${percentage}%)`;
+
+    // Add a delete button to each list item (code for delete button remains the same as before)
+    // ...
+
+    categoryList.appendChild(listItem);
+  });
+
+  // If there are no categories, display 'Unallocated' at 100%
+  if (data.labels.length === 0) {
+    const listItem = document.createElement('div');
+    listItem.innerText = `Unallocated: ${totalHoursInYear} hours (100%)`;
+    categoryList.appendChild(listItem);
+  }
+}
+
 
 
 // Functions to save and load data from localStorage
