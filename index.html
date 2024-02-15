@@ -16,45 +16,29 @@
       </div>
     </header>
 
-<main>
-  <div id="pieChart">
-    <canvas id="chartArea"></canvas>
-  </div>
+    <main>
+      <div id="pieChart">
+        <canvas id="chartArea"></canvas>
+      </div>
 
-  <!-- This is where you add new categories -->
-  <footer>
-    <input type="text" id="categoryName" placeholder="Category Name">
-    <input type="number" id="hoursSpent" placeholder="Hours Spent">
-    <select id="frequency">
-      <option value="daily">Daily</option>
-      <option value="weekly">Weekly</option>
-      <option value="monthly">Monthly</option>
-    </select>
-    <button onclick="addCategory()">ADD</button>
-  </footer>
+      <!-- Input fields for adding new categories -->
+      <div id="inputContainer">
+        <input type="text" id="categoryName" placeholder="Category Name">
+        <input type="number" id="hoursSpent" placeholder="Hours Spent" max="24" min="1">
+        <select id="frequency">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="monthly">Monthly</option>
+        </select>
+        <button onclick="addCategory()">ADD</button>
+      </div>
 
-  <!-- This is where categories will be listed -->
-  <div id="categoryList">
-    <!-- Category items will be appended here by JavaScript -->
-  </div>
-</main>
-
-    
-<footer>
-  <input type="text" id="categoryName" placeholder="Category Name">
-  <input type="number" id="hoursSpent" placeholder="Hours Spent">
-  <button onclick="addCategory()">ADD</button> <!-- Changed from EDIT to ADD -->
-    <!-- Existing input fields -->
-  <select id="frequency">
-    <option value="daily">Daily</option>
-    <option value="weekly">Weekly</option>
-    <option value="monthly">Monthly</option>
-  </select>
-  <button onclick="addCategory()">ADD</button>
-</footer>
-
+      <!-- Category items will be appended here by JavaScript -->
+      <div id="categoryList"></div>
+    </main>
   </div>
   
   <script src="script.js"></script>
 </body>
 </html>
+
