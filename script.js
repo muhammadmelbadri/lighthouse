@@ -33,36 +33,21 @@ function createPieChart() {
 }
 
 function addCategory() {
-  // ...existing code to retrieve and validate categoryName and hoursSpent...
+  const categoryName = document.getElementById('categoryName').value.trim();
+  const hoursSpent = parseFloat(document.getElementById('hoursSpent').value.trim());
+  const frequency = document.getElementById('frequency').value;
 
-  // Calculate total hours already allocated, including the "Unallocated" slice if present
-  const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
-  const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
-
-  // Check if the new hours exceed the total hours in the year
-  if (totalAllocatedHours + hoursSpent > totalHoursInYear) {
-    alert('The total hours allocated exceed the total hours in the year!');
-    return; // Prevent adding the category
+  // Validate hours to not exceed 24 and to be positive
+  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0 || hoursSpent > 24) {
+    alert("Please enter a category name and a valid number of hours (1-24).");
+    return;
   }
 
-  // If there is an "Unallocated" slice, update it; otherwise, add a new category
-  const unallocatedIndex = data.labels.indexOf('Unallocated');
-  if (unallocatedIndex !== -1) {
-    data.datasets[0].data[unallocatedIndex] -= hoursSpent;
-    if (data.datasets[0].data[unallocatedIndex] <= 0) {
-      // If the "Unallocated" time becomes zero, remove it from the dataset
-      data.labels.splice(unallocatedIndex, 1);
-      data.datasets[0].data.splice(unallocatedIndex, 1);
-      data.datasets[0].backgroundColor.splice(unallocatedIndex, 1);
-    }
-  } else {
-    data.labels.push(categoryName);
-    data.datasets[0].data.push(hoursSpent);
-    data.datasets[0].backgroundColor.push(getRandomColor()); // A function to generate a random color
-  }
+  const totalHours = calculateTotalHours(hoursSpent, frequency);
 
-  // ...existing code to update the chart, clear input fields, and save data...
+  // ...rest of the addCategory logic here, using `totalHours` instead of `hoursSpent`...
 }
+
 
 
 
