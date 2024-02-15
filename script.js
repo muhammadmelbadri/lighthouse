@@ -48,30 +48,20 @@ function calculateTotalHours(hours, frequency) {
 
 // Function to add a new category
 function addCategory() {
-  // ...other code remains unchanged...
+  const categoryName = document.getElementById('categoryName').value.trim();
+  const hoursSpent = parseFloat(document.getElementById('hoursSpent').value);
+  const frequency = document.getElementById('frequency').value;
+
+  // Validate inputs
+  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0 || hoursSpent > 24) {
+    alert("Please enter a category name and a valid number of hours (1-24).");
+    return;
+  }
 
   // Calculate the total hours for the category
   const totalHours = calculateTotalHours(hoursSpent, frequency);
 
-  // Calculate the current allocated hours excluding any existing 'Unallocated' category
-  let allocatedHours = 0;
-  for (let i = 0; i < data.labels.length; i++) {
-    if (data.labels[i] !== 'Unallocated') {
-      allocatedHours += data.datasets[0].data[i];
-    }
-  }
-
-  // Determine the hours currently allocated to 'Unallocated', if it exists
-  const unallocatedIndex = data.labels.indexOf('Unallocated');
-  const unallocatedHours = unallocatedIndex !== -1 ? data.datasets[0].data[unallocatedIndex] : 24 * 365;
-
-  // Check if adding this category would exceed the total hours in the year
-  if (allocatedHours + totalHours > 24 * 365) {
-    alert('Adding this category would exceed the total hours in the year!');
-    return;
-  }
-
-  // Add or update the category
+  // Find or create category index
   const categoryIndex = data.labels.indexOf(categoryName);
   if (categoryIndex === -1) {
     // New category
@@ -83,14 +73,13 @@ function addCategory() {
     data.datasets[0].data[categoryIndex] += totalHours;
   }
 
-  // Adjust 'Unallocated' hours
-  if (unallocatedIndex !== -1) {
-    data.datasets[0].data[unallocatedIndex] = unallocatedHours - totalHours;
-  }
-
-  // ...remaining code for createPieChart, displayCategories, and saveData...
+  // Update the pie chart
+  createPieChart();
+  // Update the list of categories
+  displayCategories();
+  // Save the new data
+  saveData();
 }
-
 // Function to update the information about the year
 function updateYearInfo() {
   const now = new Date();
@@ -147,29 +136,18 @@ createPieChart();
 
 // Additional function to handle the deletion of categories
 function deleteCategory(index) {
-  // ...other code remains unchanged...
-
-  // Retrieve the hours for the category being deleted
-  const hoursToRemove = data.datasets[0].data[index];
-
-  // Remove the category from the dataset
-  data.labels.splice(index, 1);
-  data.datasets[0].data.splice(index, 1);
-  data.datasets[0].backgroundColor.splice(index, 1);
-
-  // Update 'Unallocated' hours
-  const unallocatedIndex = data.labels.indexOf('Unallocated');
-  if (unallocatedIndex !== -1) {
-    data.datasets[0].data[unallocatedIndex] += hoursToRemove;
-  } else {
-    data.labels.push('Unallocated');
-    data.datasets[0].data.push(hoursToRemove);
-    data.datasets[0].backgroundColor.push('#cccccc');
+  // Adjust the 'Unallocated' hours if this category is removed
+  if (data.labels[index] !== 'Unallocated') {
+    const hoursToRemove = data.datasets[0].data[index];
+    const unallocatedIndex = data.labels.indexOf('Unallocated');
+    if (unallocatedIndex !== -1) {
+      data.datasets[0].data[unallocatedIndex] += hoursToRemove;
+    } else {
+      data.labels.push('Unallocated');
+      data.datasets[0].data.push(hoursToRemove);
+      data.datasets[0].backgroundColor.push('#cccccc');
+    }
   }
-
-  // ...remaining code for createPieChart, displayCategories, and saveData...
-}
-
   
   // Remove the category from the dataset
   data.labels.splice(index, 1);
