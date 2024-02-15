@@ -33,15 +33,37 @@ function createPieChart() {
 }
 
 function addCategory() {
-  // Check if we're adding the first actual category and remove 'Unallocated' if so
-  if (data.labels.length === 1 && data.labels[0] === 'Unallocated') {
-    data.labels.pop();
-    data.datasets[0].data.pop();
-    data.datasets[0].backgroundColor.pop();
+  // ...existing code to retrieve and validate categoryName and hoursSpent...
+
+  // Calculate total hours already allocated, including the "Unallocated" slice if present
+  const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
+  const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
+
+  // Check if the new hours exceed the total hours in the year
+  if (totalAllocatedHours + hoursSpent > totalHoursInYear) {
+    alert('The total hours allocated exceed the total hours in the year!');
+    return; // Prevent adding the category
   }
 
-  // ...rest of your addCategory logic here...
+  // If there is an "Unallocated" slice, update it; otherwise, add a new category
+  const unallocatedIndex = data.labels.indexOf('Unallocated');
+  if (unallocatedIndex !== -1) {
+    data.datasets[0].data[unallocatedIndex] -= hoursSpent;
+    if (data.datasets[0].data[unallocatedIndex] <= 0) {
+      // If the "Unallocated" time becomes zero, remove it from the dataset
+      data.labels.splice(unallocatedIndex, 1);
+      data.datasets[0].data.splice(unallocatedIndex, 1);
+      data.datasets[0].backgroundColor.splice(unallocatedIndex, 1);
+    }
+  } else {
+    data.labels.push(categoryName);
+    data.datasets[0].data.push(hoursSpent);
+    data.datasets[0].backgroundColor.push(getRandomColor()); // A function to generate a random color
+  }
+
+  // ...existing code to update the chart, clear input fields, and save data...
 }
+
 
 
 
@@ -94,31 +116,51 @@ function displayCategories() {
   const totalHours = data.datasets[0].data.reduce((sum, val) => sum + val, 0);
   const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
 
-  // Check if totalHours is zero (no data), set it to total hours in a year to avoid division by zero
-  const effectiveTotalHours = totalHours === 0 ? totalHoursInYear : totalHours;
-
   // Create list items for each category
   data.labels.forEach((label, index) => {
-    const hours = data.datasets[0].data[index];
-    const percentage = ((hours / effectiveTotalHours) * 100).toFixed(2); // Calculate the percentage
-
-    // Create a list item for the category and its calculated percentage
     const listItem = document.createElement('div');
-    listItem.innerText = `${label}: ${hours} hours (${percentage}%)`;
+    listItem.innerText = `${label}: ${data.datasets[0].data[index]} hours`;
 
-    // Add a delete button to each list item (code for delete button remains the same as before)
-    // ...
+    // Create a delete button
+    const deleteButton = document.createElement('button');
+    deleteButton.innerText = 'Delete';
+    deleteButton.onclick = function() {
+      // Remove the category data from the arrays
+      data.labels.splice(index, 1);
+      data.datasets[0].data.splice(index, 1);
+      data.datasets[0].backgroundColor.splice(index, 1);
 
+      // Recalculate the "Unallocated" time
+      const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
+      const unallocatedTime = totalHoursInYear - totalAllocatedHours;
+
+      // Update or add the "Unallocated" slice
+      const unallocatedIndex = data.labels.indexOf('Unallocated');
+      if (unallocatedTime > 0) {
+        if (unallocatedIndex !== -1) {
+          data.datasets[0].data[unallocatedIndex] = unallocatedTime;
+        } else {
+          data.labels.push('Unallocated');
+          data.datasets[0].data.push(unallocatedTime);
+          data.datasets[0].backgroundColor.push('#cccccc'); // A neutral color for 'Unallocated'
+        }
+      } else if (unallocatedIndex !== -1) {
+        data.labels.splice(unallocatedIndex, 1);
+        data.datasets[0].data.splice(unallocatedIndex, 1);
+        data.datasets[0].backgroundColor.splice(unallocatedIndex, 1);
+      }
+
+      // Update the chart and the category list display
+      createPieChart();
+      displayCategories();
+      saveData(); // Save the updated data
+    };
+
+    listItem.appendChild(deleteButton);
     categoryList.appendChild(listItem);
   });
-
-  // If there are no categories, display 'Unallocated' at 100%
-  if (data.labels.length === 0) {
-    const listItem = document.createElement('div');
-    listItem.innerText = `Unallocated: ${totalHoursInYear} hours (100%)`;
-    categoryList.appendChild(listItem);
-  }
 }
+
 
 
 
