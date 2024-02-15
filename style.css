@@ -1,16 +1,22 @@
 body, html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  background-color: #e0e0e0; /* This sets the background to grey */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #container {
-  max-width: 600px;
-  margin: auto;
+  width: 375px; /* iPhone width */
   background-color: #ffffff;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Add other styling for the container as needed */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for better aesthetics */
+  margin-top: 50px; /* Adjust as needed to center on the screen */
 }
+
 
 header {
   text-align: center;
