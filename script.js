@@ -52,22 +52,28 @@ function addCategory() {
     return;
   }
 
-  // Calculate total hours based on the selected frequency
+  // Calculate the total hours for the year based on the frequency
   var totalHours = calculateTotalHours(hoursSpent, frequency);
 
-  // Check if the new hours exceed the total hours in the year
+  // Check if the new total hours exceed the total hours in the year
   const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
   const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
-
   if (totalAllocatedHours + totalHours > totalHoursInYear) {
     alert('The total hours allocated exceed the total hours in the year!');
     return; // Prevent adding the category
   }
 
-  // Add the new category to the chart data
-  data.labels.push(categoryName);
-  data.datasets[0].data.push(totalHours);
-  data.datasets[0].backgroundColor.push(getRandomColor()); // Assign a random color
+  // Update or add the new category
+  const existingIndex = data.labels.indexOf(categoryName);
+  if (existingIndex !== -1) {
+    // Update existing category
+    data.datasets[0].data[existingIndex] += totalHours;
+  } else {
+    // Add new category
+    data.labels.push(categoryName);
+    data.datasets[0].data.push(totalHours);
+    data.datasets[0].backgroundColor.push(getRandomColor()); // Assign a random color
+  }
 
   // Update the chart and category list display
   createPieChart();
@@ -78,6 +84,7 @@ function addCategory() {
   // Save the updated data to local storage
   saveData();
 }
+
 
 // Function to generate a random color for the pie chart segments
 function getRandomColor() {
