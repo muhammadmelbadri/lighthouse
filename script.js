@@ -10,6 +10,13 @@ var data = {
 
 // Function to create or update the pie chart
 function createPieChart() {
+  // If no categories are present, set up 'Unallocated'
+  if (data.labels.length === 0) {
+    data.labels.push('Unallocated');
+    data.datasets[0].data.push(24 * 365); // Total hours in a non-leap year
+    data.datasets[0].backgroundColor.push('#cccccc'); // A neutral color for 'Unallocated'
+  }
+
   var ctx = document.getElementById('chartArea').getContext('2d');
   if (window.myPieChart) {
     window.myPieChart.destroy();
@@ -19,11 +26,23 @@ function createPieChart() {
     data: data,
     options: {
       responsive: true,
-      maintainAspectRatio: false, // Add this line
-      // ... other options
+      maintainAspectRatio: false,
+      // Additional options here...
     }
   });
 }
+
+function addCategory() {
+  // Check if we're adding the first actual category and remove 'Unallocated' if so
+  if (data.labels.length === 1 && data.labels[0] === 'Unallocated') {
+    data.labels.pop();
+    data.datasets[0].data.pop();
+    data.datasets[0].backgroundColor.pop();
+  }
+
+  // ...rest of your addCategory logic here...
+}
+
 
 
 // Function to add a new category
