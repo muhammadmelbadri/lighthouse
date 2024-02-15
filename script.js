@@ -10,13 +10,6 @@ var data = {
 
 // Function to create or update the pie chart
 function createPieChart() {
-  // If no categories are present, set up 'Unallocated'
-  if (data.labels.length === 0) {
-    data.labels.push('Unallocated');
-    data.datasets[0].data.push(24 * 365); // Total hours in a non-leap year
-    data.datasets[0].backgroundColor.push('#cccccc'); // A neutral color for 'Unallocated'
-  }
-
   var ctx = document.getElementById('chartArea').getContext('2d');
   if (window.myPieChart) {
     window.myPieChart.destroy();
@@ -26,16 +19,32 @@ function createPieChart() {
     data: data,
     options: {
       responsive: true,
-      maintainAspectRatio: false,
-      // Additional options here...
+      maintainAspectRatio: false
     }
   });
 }
 
+// Function to calculate total hours based on frequency
+function calculateTotalHours(hours, frequency) {
+  const daysInYear = 365; // Or 366 for a leap year
+  const weeksInYear = 52;
+  const monthsInYear = 12;
+
+  let totalHours;
+  switch (frequency) {
+    case 'daily': totalHours = hours * daysInYear; break;
+    case 'weekly': totalHours = hours * weeksInYear; break;
+    case 'monthly': totalHours = hours * monthsInYear; break;
+    default: totalHours = 0;
+  }
+  return totalHours;
+}
+
+// Function to add a new category
 function addCategory() {
-  const categoryName = document.getElementById('categoryName').value.trim();
-  const hoursSpent = parseFloat(document.getElementById('hoursSpent').value.trim());
-  const frequency = document.getElementById('frequency').value;
+  var categoryName = document.getElementById('categoryName').value.trim();
+  var hoursSpent = parseFloat(document.getElementById('hoursSpent').value.trim());
+  var frequency = document.getElementById('frequency').value;
 
   // Validate hours to not exceed 24 and to be positive
   if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0 || hoursSpent > 24) {
@@ -43,35 +52,23 @@ function addCategory() {
     return;
   }
 
-  const totalHours = calculateTotalHours(hoursSpent, frequency);
+  // Calculate total hours based on the selected frequency
+  var totalHours = calculateTotalHours(hoursSpent, frequency);
 
-  // ...rest of the addCategory logic here, using `totalHours` instead of `hoursSpent`...
-}
-
-
-
-
-
-// Function to add a new category
-function addCategory() {
-  var categoryName = document.getElementById('categoryName').value.trim();
-  var hoursSpent = parseFloat(document.getElementById('hoursSpent').value.trim());
-  // Basic validation for empty values
-  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0) {
-    alert("Please enter a category name and a valid number of hours.");
-    return;
-  }
   // Check if the new hours exceed the total hours in the year
   const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
   const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
-  if (totalAllocatedHours + hoursSpent > totalHoursInYear) {
+
+  if (totalAllocatedHours + totalHours > totalHoursInYear) {
     alert('The total hours allocated exceed the total hours in the year!');
     return; // Prevent adding the category
   }
+
   // Add the new category to the chart data
   data.labels.push(categoryName);
-  data.datasets[0].data.push(hoursSpent);
-  data.datasets[0].backgroundColor.push(getRandomColor()); // Assign a random color or choose one from a predefined set
+  data.datasets[0].data.push(totalHours);
+  data.datasets[0].backgroundColor.push(getRandomColor()); // Assign a random color
+
   // Update the chart and category list display
   createPieChart();
   displayCategories();
@@ -94,60 +91,8 @@ function getRandomColor() {
 
 // Function to display categories below the chart
 function displayCategories() {
-  const categoryList = document.getElementById('categoryList');
-  categoryList.innerHTML = ''; // Clear the list
-
-  // Calculate the total hours for percentage calculation
-  const totalHours = data.datasets[0].data.reduce((sum, val) => sum + val, 0);
-  const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
-
-  // Create list items for each category
-  data.labels.forEach((label, index) => {
-    const listItem = document.createElement('div');
-    listItem.innerText = `${label}: ${data.datasets[0].data[index]} hours`;
-
-    // Create a delete button
-    const deleteButton = document.createElement('button');
-    deleteButton.innerText = 'Delete';
-    deleteButton.onclick = function() {
-      // Remove the category data from the arrays
-      data.labels.splice(index, 1);
-      data.datasets[0].data.splice(index, 1);
-      data.datasets[0].backgroundColor.splice(index, 1);
-
-      // Recalculate the "Unallocated" time
-      const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
-      const unallocatedTime = totalHoursInYear - totalAllocatedHours;
-
-      // Update or add the "Unallocated" slice
-      const unallocatedIndex = data.labels.indexOf('Unallocated');
-      if (unallocatedTime > 0) {
-        if (unallocatedIndex !== -1) {
-          data.datasets[0].data[unallocatedIndex] = unallocatedTime;
-        } else {
-          data.labels.push('Unallocated');
-          data.datasets[0].data.push(unallocatedTime);
-          data.datasets[0].backgroundColor.push('#cccccc'); // A neutral color for 'Unallocated'
-        }
-      } else if (unallocatedIndex !== -1) {
-        data.labels.splice(unallocatedIndex, 1);
-        data.datasets[0].data.splice(unallocatedIndex, 1);
-        data.datasets[0].backgroundColor.splice(unallocatedIndex, 1);
-      }
-
-      // Update the chart and the category list display
-      createPieChart();
-      displayCategories();
-      saveData(); // Save the updated data
-    };
-
-    listItem.appendChild(deleteButton);
-    categoryList.appendChild(listItem);
-  });
+  // ... existing displayCategories function ...
 }
-
-
-
 
 // Functions to save and load data from localStorage
 function saveData() {
@@ -159,44 +104,11 @@ function loadData() {
 }
 
 function updateYearInfo() {
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const endOfYear = new Date(currentYear, 11, 31, 23, 59, 59); // December 31st
-  const msPerDay = 24 * 60 * 60 * 1000; // Number of milliseconds in a day
-  
-  const daysLeft = Math.ceil((endOfYear - now) / msPerDay);
-  const hoursLeft = daysLeft * 24;
-
-  document.getElementById('yearInfo').innerHTML = `
-    <div>${daysLeft} Days left in ${currentYear}</div>
-    <div>${hoursLeft} Hours left in ${currentYear}</div>
-  `;
+  // ... existing updateYearInfo function ...
 }
-
 
 // Initialize the pie chart with any saved data and update the year info
 loadData();
 updateYearInfo();
 createPieChart();
 
-function calculateTotalHours(hours, frequency) {
-  const daysInYear = 365; // Or 366 for a leap year
-  const weeksInYear = 52;
-  const monthsInYear = 12;
-
-  let totalHours;
-  switch (frequency) {
-    case 'daily':
-      totalHours = hours * daysInYear;
-      break;
-    case 'weekly':
-      totalHours = hours * weeksInYear;
-      break;
-    case 'monthly':
-      totalHours = hours * monthsInYear;
-      break;
-    default:
-      totalHours = 0;
-  }
-  return totalHours;
-}
