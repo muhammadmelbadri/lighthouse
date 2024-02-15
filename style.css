@@ -7,20 +7,20 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-family: Arial, sans-serif; /* Optional: Sets a default font for your app */
 }
 
 #container {
   width: 375px; /* iPhone width */
   background-color: #ffffff;
-  /* Add other styling for the container as needed */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: adds shadow for better aesthetics */
   margin-top: 50px; /* Adjust as needed to center on the screen */
+  border-radius: 20px; /* Optional: if you want rounded corners */
 }
-
 
 header {
   text-align: center;
-  padding-bottom: 20px;
+  padding: 20px;
   border-bottom: 1px solid #eeeeee;
 }
 
@@ -29,26 +29,32 @@ header {
 }
 
 main {
-  padding: 20px 0;
+  padding: 20px;
 }
 
 #pieChart {
   height: 300px; /* Adjust as needed */
   margin-bottom: 20px;
+  position: relative; /* Ensures that the canvas is correctly positioned */
 }
 
-footer {
+#inputContainer {
   text-align: center;
-  padding-top: 20px;
-  border-top: 1px solid #eeeeee;
+  margin-bottom: 20px; /* Spacing between input section and category list */
+}
+
+#categoryList {
+  margin-top: 20px;
 }
 
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+select {
   padding: 10px;
   margin-right: 10px;
   border: 1px solid #dddddd;
   border-radius: 4px;
+  font-size: 16px; /* Makes the text easy to read */
 }
 
 button {
@@ -58,26 +64,31 @@ button {
   background-color: #0056b3;
   color: white;
   cursor: pointer;
+  font-size: 16px; /* Matches the input text size */
 }
 
 button:hover {
   background-color: #003d82;
 }
 
+/* Responsive design adjustments */
 @media (max-width: 768px) {
   #container {
     width: auto;
     margin: 10px;
   }
 
+  #inputContainer, 
+  #categoryList, 
   footer {
     flex-direction: column;
     align-items: stretch;
   }
 
   input[type="text"],
-  input[type="number"] {
-    width: auto; /* Let the inputs take the full width on small screens */
+  input[type="number"],
+  select {
+    width: calc(100% - 22px); /* Full width minus padding and border */
     margin-bottom: 10px; /* Add space between the stacked inputs */
   }
 
@@ -86,8 +97,3 @@ button:hover {
   }
 }
 
-#chartArea {
-  width: 300px !important;
-  height: 300px !important;
-  margin: auto;
-}
