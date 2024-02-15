@@ -11,7 +11,6 @@ var data = {
 // Function to create or update the pie chart
 function createPieChart() {
   var ctx = document.getElementById('chartArea').getContext('2d');
-  // If there's already a chart instance, destroy it to ensure we're creating a fresh one
   if (window.myPieChart) {
     window.myPieChart.destroy();
   }
@@ -20,10 +19,12 @@ function createPieChart() {
     data: data,
     options: {
       responsive: true,
-      // Additional options can be set here
+      maintainAspectRatio: false, // Add this line
+      // ... other options
     }
   });
 }
+
 
 // Function to add a new category
 function addCategory() {
