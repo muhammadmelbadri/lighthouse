@@ -194,3 +194,24 @@ loadData();
 updateYearInfo();
 createPieChart();
 
+function calculateTotalHours(hours, frequency) {
+  const daysInYear = 365; // Or 366 for a leap year
+  const weeksInYear = 52;
+  const monthsInYear = 12;
+
+  let totalHours;
+  switch (frequency) {
+    case 'daily':
+      totalHours = hours * daysInYear;
+      break;
+    case 'weekly':
+      totalHours = hours * weeksInYear;
+      break;
+    case 'monthly':
+      totalHours = hours * monthsInYear;
+      break;
+    default:
+      totalHours = 0;
+  }
+  return totalHours;
+}
