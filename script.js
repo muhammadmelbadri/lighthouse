@@ -67,8 +67,20 @@ function getRandomColor() {
 
 // Function to display categories below the chart
 function displayCategories() {
-  // ... existing displayCategories function ...
-}
+  const categoryList = document.getElementById('categoryList');
+  categoryList.innerHTML = ''; // Clear the list
+
+  // Calculate the total hours for percentage calculation
+  const totalHours = data.datasets[0].data.reduce((sum, val) => sum + val, 0);
+  const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
+
+  // Check if totalHours is zero (no data), set it to total hours in a year to avoid division by zero
+  const effectiveTotalHours = totalHours === 0 ? totalHoursInYear : totalHours;
+
+  // Create list items for each category
+  data.labels.forEach((label, index) => {
+    const hours = data.datasets[0].data[index
+
 
 // Functions to save and load data from localStorage
 function saveData() {
