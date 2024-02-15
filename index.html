@@ -6,33 +6,23 @@
   <title>Your Year in Pie</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div id="container">
- <header>
-  <h1>Your Year in Pie</h1>
-  <div id="yearInfo">
-    <!-- Content will be filled by updateYearInfo() function -->
-  </div>
-</header>
+    <header>
+      <h1>Your Year in Pie</h1>
+      <div id="yearInfo">
+        <!-- Content will be filled by updateYearInfo() function -->
+      </div>
+    </header>
 
-    
     <main>
-      <div id="pieChart"></div>
+      <div id="pieChart">
+        <canvas id="chartArea"></canvas>
+      </div>
       <div id="categoryList">
         <!-- Category items will be appended here by JavaScript -->
       </div>
-
-      <div id="pieChart">
-  <canvas id="chartArea"></canvas>
-</div>
-
-  <div id="pieChart">
-    <canvas id="chartArea"></canvas>
-  </div>
-  <!-- Rest of your main content -->
-      
     </main>
     
     <footer>
@@ -43,8 +33,5 @@
   </div>
   
   <script src="script.js"></script>
-<script src="script.js"></script>
 </body>
-
 </html>
-
