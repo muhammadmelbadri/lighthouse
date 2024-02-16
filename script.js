@@ -148,35 +148,38 @@ createPieChart();
 
 // Additional function to handle the deletion of categories
 function deleteCategory(index) {
-  // Adjust the 'Unallocated' hours if this category is removed
   if (data.labels[index] !== 'Unallocated') {
+    // Retrieve the hours for the category being deleted
     const hoursToRemove = data.datasets[0].data[index];
+
+    // Remove the category from the dataset
+    data.labels.splice(index, 1);
+    data.datasets[0].data.splice(index, 1);
+    data.datasets[0].backgroundColor.splice(index, 1);
+
+    // Update 'Unallocated' hours
     const unallocatedIndex = data.labels.indexOf('Unallocated');
     if (unallocatedIndex !== -1) {
-      data.datasets[0].data[unallocatedIndex] += hoursToRemove;
+      // Add back the hours to 'Unallocated', ensuring it doesn't exceed the total hours in a year
+      data.datasets[0].data[unallocatedIndex] = Math.min(data.datasets[0].data[unallocatedIndex] + hoursToRemove, 24 * 365);
     } else {
+      // If 'Unallocated' doesn't exist, create it with the removed hours
       data.labels.push('Unallocated');
       data.datasets[0].data.push(hoursToRemove);
       data.datasets[0].backgroundColor.push('#cccccc');
-
-        // Retrieve the hours for the category being deleted
-  const hoursToRemove = data.datasets[0].data[index];
-
-  // Remove the category from the dataset
-  data.labels.splice(index, 1);
-  data.datasets[0].data.splice(index, 1);
-  data.datasets[0].backgroundColor.splice(index, 1);
-
-  // Update 'Unallocated' hours
-  const unallocatedIndex = data.labels.indexOf('Unallocated');
-  if (unallocatedIndex !== -1) {
-    data.datasets[0].data[unallocatedIndex] += hoursToRemove;
-  } else {
-    data.labels.push('Unallocated');
-    data.datasets[0].data.push(hoursToRemove);
-    data.datasets[0].backgroundColor.push('#cccccc');
     }
+  } else {
+    // If trying to delete 'Unallocated', simply ignore as it should always exist
+    console.log("Can't delete 'Unallocated' category.");
+    return;
   }
+
+  // Update the pie chart and category list
+  createPieChart();
+  displayCategories();
+  saveData();
+}
+
   
   // Remove the category from the dataset
   data.labels.splice(index, 1);
