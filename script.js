@@ -174,6 +174,7 @@ function deleteCategory(index) {
     return;
   }
 
+  
   // Update the pie chart and category list
   createPieChart();
   displayCategories();
