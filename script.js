@@ -168,7 +168,7 @@ function deleteCategory(index) {
       data.datasets[0].data.push(hoursToRemove);
       data.datasets[0].backgroundColor.push('#cccccc');
     }
-  } else {
+   else {
     // If trying to delete 'Unallocated', simply ignore as it should always exist
     console.log("Can't delete 'Unallocated' category.");
     return;
@@ -178,7 +178,7 @@ function deleteCategory(index) {
   createPieChart();
   displayCategories();
   saveData();
-}
+
 
   
   // Remove the category from the dataset
@@ -191,7 +191,7 @@ function deleteCategory(index) {
   displayCategories();
   saveData();
 }
-  }
+  
 
 // Update the displayCategories function to include delete buttons
 function displayCategories() {
