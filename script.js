@@ -61,13 +61,24 @@ function addCategory() {
   // Calculate the total hours for the year based on the frequency
   var totalHours = calculateTotalHours(hoursSpent, frequency);
 
-  // Check if the new total hours exceed the total hours in the year
-  const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
-  const totalAllocatedHours = data.datasets[0].data.reduce((acc, cur) => acc + cur, 0);
-  if (totalAllocatedHours + totalHours > totalHoursInYear) {
-    alert('The total hours allocated exceed the total hours in the year!');
-    return; // Prevent adding the category
-  }
+// After calculating totalHours, check if adding this category would exceed the total hours in a year
+const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
+const unallocatedIndex = data.labels.indexOf('Unallocated');
+const unallocatedHours = unallocatedIndex !== -1 ? data.datasets[0].data[unallocatedIndex] : totalHoursInYear;
+
+if (unallocatedHours - totalHours < 0) {
+  alert('The total hours allocated exceed the total hours in the year!');
+  return; // Prevent adding the category
+}
+const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
+const unallocatedIndex = data.labels.indexOf('Unallocated');
+const unallocatedHours = unallocatedIndex !== -1 ? data.datasets[0].data[unallocatedIndex] : totalHoursInYear;
+
+if (unallocatedHours - totalHours < 0) {
+  alert('The total hours allocated exceed the total hours in the year!');
+  return; // Prevent adding the category
+}
+
 
   // Update or add the new category
   const existingIndex = data.labels.indexOf(categoryName);
@@ -81,6 +92,12 @@ function addCategory() {
     data.datasets[0].backgroundColor.push(getRandomColor()); // Assign a random color
   }
 
+// Update the 'Unallocated' hours
+if (unallocatedIndex !== -1) {
+  data.datasets[0].data[unallocatedIndex] -= totalHours;
+}
+
+  
   // Update the chart and category list display
   createPieChart();
   displayCategories();
@@ -158,18 +175,22 @@ function deleteCategory(index) {
     data.datasets[0].data.splice(index, 1);
     data.datasets[0].backgroundColor.splice(index, 1);
 
-    // Update 'Unallocated' hours
-    const unallocatedIndex = data.labels.indexOf('Unallocated');
-    if (unallocatedIndex !== -1) {
-      data.datasets[0].data[unallocatedIndex] = Math.min(
-        data.datasets[0].data[unallocatedIndex] + hoursToRemove,
-        24 * 365
-      );
-    } else {
-      data.labels.push('Unallocated');
-      data.datasets[0].data.push(hoursToRemove);
-      data.datasets[0].backgroundColor.push('#cccccc');
-    }
+// Update 'Unallocated' hours
+const unallocatedIndex = data.labels.indexOf('Unallocated');
+const totalHoursInYear = 24 * 365; // Adjust for leap years if necessary
+if (unallocatedIndex !== -1) {
+  data.datasets[0].data[unallocatedIndex] = Math.min(
+    data.datasets[0].data[unallocatedIndex] + hoursToRemove,
+    totalHoursInYear
+  );
+} else {
+  // If 'Unallocated' doesn't exist, create it with the removed hours
+  // This shouldn't normally happen if 'Unallocated' is initialized correctly
+  data.labels.push('Unallocated');
+  data.datasets[0].data.push(hoursToRemove);
+  data.datasets[0].backgroundColor.push('#cccccc');
+}
+
 
     // Update the pie chart and category list
     createPieChart();
