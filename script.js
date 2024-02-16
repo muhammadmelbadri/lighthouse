@@ -148,6 +148,7 @@ createPieChart();
 
 // Additional function to handle the deletion of categories
 function deleteCategory(index) {
+  // Only proceed if the category is not 'Unallocated'
   if (data.labels[index] !== 'Unallocated') {
     // Retrieve the hours for the category being deleted
     const hoursToRemove = data.datasets[0].data[index];
@@ -160,19 +161,24 @@ function deleteCategory(index) {
     // Update 'Unallocated' hours
     const unallocatedIndex = data.labels.indexOf('Unallocated');
     if (unallocatedIndex !== -1) {
-      // Add back the hours to 'Unallocated', ensuring it doesn't exceed the total hours in a year
-      data.datasets[0].data[unallocatedIndex] = Math.min(data.datasets[0].data[unallocatedIndex] + hoursToRemove, 24 * 365);
+      data.datasets[0].data[unallocatedIndex] = Math.min(
+        data.datasets[0].data[unallocatedIndex] + hoursToRemove,
+        24 * 365
+      );
     } else {
-      // If 'Unallocated' doesn't exist, create it with the removed hours
       data.labels.push('Unallocated');
       data.datasets[0].data.push(hoursToRemove);
       data.datasets[0].backgroundColor.push('#cccccc');
     }
-   else {
-    // If trying to delete 'Unallocated', simply ignore as it should always exist
+
+    // Update the pie chart and category list
+    createPieChart();
+    displayCategories();
+    saveData();
+  } else {
     console.log("Can't delete 'Unallocated' category.");
-    return;
   }
+}
 
   
   // Update the pie chart and category list
