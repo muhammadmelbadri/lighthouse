@@ -197,7 +197,7 @@ function deleteCategory(index) {
   createPieChart();
   displayCategories();
   saveData();
-}
+
   
 
 // Update the displayCategories function to include delete buttons
