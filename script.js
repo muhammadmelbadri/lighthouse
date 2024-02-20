@@ -13,6 +13,8 @@ const categoryName = 'Some Category';
 
 let totalHours = calculateTotalHours(); // Ensure this function call is before line 109
 
+data.labels.push(categoryName);
+data.datasets[0].data.push(totalHours);
 
 document.addEventListener('DOMContentLoaded', (event) => {
   updateYearInfo();
