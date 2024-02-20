@@ -8,7 +8,19 @@ var data = {
   }]
 };
 
+const categoryName = 'Some Category';
+// Rest of your script where categoryName is used
+
+let totalHours = calculateTotalHours(); // Ensure this function call is before line 109
+
+let unallocatedIndex = 0; // Assuming 0 as a starting index or default value
+// Further logic that uses or modifies unallocatedIndex
+
 const totalHoursInYear = 24 * 365; // Declare this only once, at the top of your function.
+
+if (typeof document !== 'undefined') {
+  // Code that uses `document`
+}
 
 // Function to create or update the pie chart
 function createPieChart() {
@@ -53,8 +65,8 @@ function addCategory() {
   var hoursSpent = parseFloat(document.getElementById('hoursSpent').value.trim());
   var frequency = document.getElementById('frequency').value;
 
-  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0 || hoursSpent > 24) {
-    alert("Please enter a category name and a valid number of hours (1-24).");
+  if (!categoryName || isNaN(hoursSpent) || hoursSpent <= 0 || hoursSpent > 100) {
+    alert("Please enter a category name and a valid number of hours (1-100).");
     return;
   }
 
