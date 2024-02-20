@@ -13,6 +13,13 @@ const categoryName = 'Some Category';
 
 let totalHours = calculateTotalHours(); // Ensure this function call is before line 109
 
+
+document.addEventListener('DOMContentLoaded', (event) => {
+  updateYearInfo();
+});
+
+var unallocatedHours = unallocatedIndex !== -1 ? data.datasets[0].data[unallocatedIndex] : totalHoursInYear;
+
 let unallocatedIndex = 0; // Assuming 0 as a starting index or default value
 // Further logic that uses or modifies unallocatedIndex
 
@@ -189,6 +196,22 @@ if (unallocatedIndex !== -1) {
     console.log("Can't delete 'Unallocated' category.");
   }
 }
+
+options: {
+  tooltips: {
+    callbacks: {
+      label: function(tooltipItem, data) {
+        const dataset = data.datasets[tooltipItem.datasetIndex];
+        const total = dataset.data.reduce((total, value) => total + value);
+        const value = dataset.data[tooltipItem.index];
+        const percentage = ((value / total) * 100).toFixed(2) + '%';
+        return data.labels[tooltipItem.index] + ': ' + percentage;
+      }
+    }
+  },
+  // ... other options
+}
+
 
 // Functions to save and load data from localStorage
 function saveData() {
