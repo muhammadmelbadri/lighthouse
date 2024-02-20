@@ -8,6 +8,8 @@ var data = {
   }]
 };
 
+const totalHoursInYear = 24 * 365; // Declare this only once, at the top of your function.
+
 // Function to create or update the pie chart
 function createPieChart() {
   var ctx = document.getElementById('chartArea').getContext('2d');
@@ -138,44 +140,6 @@ function updateYearInfo() {
   `;
 }
 
-// Functions to save and load data from localStorage
-function saveData() {
-  localStorage.setItem('pieChartData', JSON.stringify(data));
-}
-
-function loadData() {
-  const storedData = localStorage.getItem('pieChartData');
-  if (storedData) {
-    data = JSON.parse(storedData);
-    createPieChart();
-  }
-}
-
-// Function to display categories below the chart
-function displayCategories() {
-  const categoryList = document.getElementById('categoryList');
-  categoryList.innerHTML = ''; // Clear the list
-
-  // Sort categories by hours in descending order
-  const sortedCategories = data.labels.map((label, index) => ({
-    label,
-    hours: data.datasets[0].data[index]
-  })).sort((a, b) => b.hours - a.hours);
-
-  // Create list items for each category
-  sortedCategories.forEach(category => {
-    const listItem = document.createElement('div');
-    listItem.innerText = `${category.label}: ${category.hours} hours`;
-    categoryList.appendChild(listItem);
-  });
-}
-
-// Initialize the pie chart with any saved data and update the year info
-loadData();
-updateYearInfo();
-createPieChart();
-
-
 // Additional function to handle the deletion of categories
 function deleteCategory(index) {
   // Only proceed if the category is not 'Unallocated'
@@ -213,6 +177,43 @@ if (unallocatedIndex !== -1) {
     console.log("Can't delete 'Unallocated' category.");
   }
 }
+
+// Functions to save and load data from localStorage
+function saveData() {
+  localStorage.setItem('pieChartData', JSON.stringify(data));
+}
+
+// Function to display categories below the chart
+function displayCategories() {
+  const categoryList = document.getElementById('categoryList');
+  categoryList.innerHTML = ''; // Clear the list
+
+  // Sort categories by hours in descending order
+  const sortedCategories = data.labels.map((label, index) => ({
+    label,
+    hours: data.datasets[0].data[index]
+  })).sort((a, b) => b.hours - a.hours);
+
+  // Create list items for each category
+  sortedCategories.forEach(category => {
+    const listItem = document.createElement('div');
+    listItem.innerText = `${category.label}: ${category.hours} hours`;
+    categoryList.appendChild(listItem);
+  });
+}
+
+function loadData() {
+  const storedData = localStorage.getItem('pieChartData');
+  if (storedData) {
+    data = JSON.parse(storedData);
+    createPieChart();
+  }
+}
+
+// Initialize the pie chart with any saved data and update the year info
+loadData();
+updateYearInfo();
+createPieChart();
 
   
   // Update the pie chart and category list
