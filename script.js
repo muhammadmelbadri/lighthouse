@@ -113,7 +113,7 @@ if (unallocatedIndex !== -1) {
 }
 
   
-  // Update the chart and category list display
+{  // Update the chart and category list display
   createPieChart();
   displayCategories();
   // Clear the input fields
